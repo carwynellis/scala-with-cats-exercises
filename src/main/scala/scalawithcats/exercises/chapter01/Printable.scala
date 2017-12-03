@@ -1,4 +1,4 @@
-package scalawithcats.chapter01
+package scalawithcats.exercises.chapter01
 
 trait Printable[A] {
 
@@ -41,8 +41,6 @@ object PrintableSyntax {
   }
 
 }
-
-final case class Cat(name: String, age: Int, color: String)
 
 object PrintableCat extends App {
 
