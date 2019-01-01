@@ -11,3 +11,7 @@ trait Monoid[A] extends Semigroup[A] {
 object Monoid {
   def apply[A](implicit monoid: Monoid[A]) = monoid
 }
+
+object Semigroup {
+  def apply[A](implicit semigroup: Semigroup[A]) = semigroup
+}

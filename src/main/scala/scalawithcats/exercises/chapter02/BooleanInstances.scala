@@ -1,6 +1,6 @@
 package scalawithcats.exercises.chapter02
 
-object Boolean {
+object BooleanInstances {
 
   implicit val booleanAnd: Monoid[Boolean] = new Monoid[Boolean] {
     def empty = true
