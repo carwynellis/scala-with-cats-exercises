@@ -30,5 +30,5 @@ object Printable {
 }
 
 
-final case class Box[A](value: A)
+
 
