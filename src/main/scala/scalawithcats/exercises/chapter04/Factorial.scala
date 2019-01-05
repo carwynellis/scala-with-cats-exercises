@@ -5,22 +5,23 @@ import cats.data.Writer
 
 object Factorial {
 
-  def slowly[A](body: => A) = try body finally Thread.sleep(100)
+  private def slowly[A](body: => A) = try body finally Thread.sleep(100)
 
-  def factorial(n: Int): Writer[List[String], Int] = {
+  type Logged[A] = Writer[List[String], A]
 
-    val result: Writer[List[String], Int] =
-      slowly {
-        if (n == 0) Writer.value[List[String], Int](1)
-        else for {
-          r <- factorial(n - 1)
-        } yield n * r
-      }
+  def factorial(n: Int): Logged[Int] = {
+
+    val result = slowly {
+      if (n == 0) 1.pure[Logged]
+      else for {
+        r <- factorial(n - 1)
+      } yield n * r
+    }
 
     for {
       a <- result
-      r <- Writer(List(s"fact $n $a"), a)
-    } yield r
+      _ <- List(s"fact $n $a").tell
+    } yield a
 
   }
 
