@@ -14,7 +14,7 @@ object TreeMonad {
     override def pure[A](a: A): Tree[A] = Leaf(a)
 
     // This is not tail recursive. Cats provides support for tail recursive flatMap through
-    // tailRecM on FlatMap. See http://eed3si9n.com/herding-cats/tail-recursive-monads.html
+    // tailRecM on FlatMap. See https://typelevel.org/cats/faq.html#tailrecm
     override def flatMap[A, B](value: Tree[A])(func: A => Tree[B]): Tree[B] = value match {
       case Branch(left, right) => Branch(flatMap(left)(func), flatMap(right)(func))
       case Leaf(v) => func(v)
