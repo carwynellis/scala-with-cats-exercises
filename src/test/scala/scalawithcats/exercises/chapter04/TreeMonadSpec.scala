@@ -18,4 +18,11 @@ class TreeMonadSpec extends FlatSpec with Matchers {
       Branch(Leaf(2), Branch(Leaf(3), Leaf(4)))
   }
 
+  behavior of "tailRecM"
+
+  it should "terminate recursion if function returns a right" in {
+    treeMonad.tailRecM[Int, Int](12)(v => Leaf(Right(v))) shouldBe Leaf(12)
+  }
+
+  // TODO - need an example of how to use tailrecm to support the recursion case.
 }
