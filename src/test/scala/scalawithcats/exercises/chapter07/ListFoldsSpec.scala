@@ -41,4 +41,6 @@ class ListFoldsSpec extends FlatSpec with Matchers {
     ListFolds.sum(List(1, 2, 3)) shouldBe 6
   }
 
+  Stream(1)
+
 }
