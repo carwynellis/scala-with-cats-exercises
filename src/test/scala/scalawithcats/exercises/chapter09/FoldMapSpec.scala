@@ -22,5 +22,5 @@ class FoldMapSpec extends AsyncFlatSpec with Matchers {
   it should "apply a function to the input sequence and fold over the result" in {
     FoldMap.parallelFoldMapCats(Vector(1, 2, 3))(_ + 1) map { result => result shouldBe 9 }
   }
-  
+
 }
