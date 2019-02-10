@@ -9,6 +9,8 @@ trait Check[E, A] {
 
   def and(that: Check[E, A]): Check[E, A] = And(this, that)
 
+  def or(that: Check[E, A]): Check[E, A] = Or(this, that)
+
   def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] = this match {
     case Pure(f) => f(a)
     case And(x, y) => (x(a), y(a)).mapN((_, _) => a)
