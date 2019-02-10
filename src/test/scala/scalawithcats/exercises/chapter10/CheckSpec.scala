@@ -18,6 +18,8 @@ class CheckSpec extends FlatSpec with Matchers {
 
   private val isEvenAndGreaterThanThree = And(isEven, isGreaterThanThree)
 
+  private val isEvenOrGreaterThanThree = Or(isEven, isEvenAndGreaterThanThree)
+
   behavior of "Pure"
 
   it should "return a Valid for a value that passes a given validation rule" in {
@@ -30,7 +32,7 @@ class CheckSpec extends FlatSpec with Matchers {
 
   behavior of "And"
 
-  it should "return a Valid for a value that passes two validation rules" in {
+  it should "return a Valid for a value that passes both validation rules" in {
     isEvenAndGreaterThanThree(4) shouldBe Valid(4)
   }
 
@@ -44,6 +46,23 @@ class CheckSpec extends FlatSpec with Matchers {
 
   it should "return an Invalid containing both errors for a value that fails both validation rules" in {
     isEvenAndGreaterThanThree(3) shouldBe Invalid(List(
+      "Value '3' is not an even number",
+      "Value '3' is not greater than 3",
+    ))
+  }
+
+  behavior of "Or"
+
+  it should "return a Valid for a value that passes both validation rules" in {
+    isEvenOrGreaterThanThree(4) shouldBe Valid(4)
+  }
+
+  it should "return a Valid for a value that passed only one validation rule" in {
+    isEvenOrGreaterThanThree(2) shouldBe Valid(2)
+  }
+
+  it should "return an Invalid for a value that fails both validation rules" in {
+    isEvenOrGreaterThanThree(3) shouldBe Invalid(List(
       "Value '3' is not an even number",
       "Value '3' is not greater than 3",
     ))
