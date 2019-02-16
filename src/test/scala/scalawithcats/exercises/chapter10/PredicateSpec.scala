@@ -4,7 +4,7 @@ import cats.data.Validated.{Invalid, Valid}
 import org.scalatest.{FlatSpec, Matchers}
 import cats.implicits._
 
-class CheckSpec extends FlatSpec with Matchers {
+class PredicateSpec extends FlatSpec with Matchers {
 
   private val isGreaterThanThree = Pure[List[String], Int] { op =>
     if (op > 3) Valid(op)
