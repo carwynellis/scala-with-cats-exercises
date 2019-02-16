@@ -3,6 +3,7 @@ package scalawithcats.exercises.chapter10
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatest.{FlatSpec, Matchers}
 import cats.implicits._
+import Predicate._
 
 class PredicateSpec extends FlatSpec with Matchers {
 

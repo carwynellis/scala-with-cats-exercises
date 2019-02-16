@@ -4,6 +4,7 @@ import cats._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
+import Predicate._
 
 sealed trait Predicate[E, A] {
 
@@ -23,8 +24,12 @@ sealed trait Predicate[E, A] {
         }
     }
   }
+
 }
 
-final case class And[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
-final case class Or[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
-final case class Pure[E, A](func: A => Validated[E, A]) extends Predicate[E, A]
+object Predicate {
+  final case class And[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
+  final case class Or[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
+  final case class Pure[E, A](func: A => Validated[E, A]) extends Predicate[E, A]
+}
+
