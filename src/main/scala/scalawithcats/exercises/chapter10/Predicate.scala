@@ -4,9 +4,10 @@ import cats._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
-import Predicate._
 
 sealed trait Predicate[E, A] {
+
+  import Predicate._
 
   def and(that: Predicate[E, A]): Predicate[E, A] = And(this, that)
 
@@ -16,11 +17,10 @@ sealed trait Predicate[E, A] {
     case Pure(func) => func(a)
     case And(left, right) => (left(a), right(a)).mapN((_, _) => a)
     case Or(left, right) => left(a) match {
-      case Valid(a1)   => Valid(a)
-      case Invalid(e1) =>
-        right(a) match {
-          case Valid(a2)   => Valid(a)
-          case Invalid(e2) => Invalid(e2)
+      case Valid(a1) => Valid(a)
+      case Invalid(e1) => right(a) match {
+        case Valid(a2) => Valid(a)
+        case Invalid(e2) => Invalid(e2)
         }
     }
   }
@@ -28,8 +28,12 @@ sealed trait Predicate[E, A] {
 }
 
 object Predicate {
+
   final case class And[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
   final case class Or[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
   final case class Pure[E, A](func: A => Validated[E, A]) extends Predicate[E, A]
-}
 
+  def apply[E, A](f: A => Validated[E, A]): Predicate[E, A] = Pure(f)
+  def lift[E, A](err: E, fn: A => Boolean): Predicate[E, A] = Pure(a => if(fn(a)) a.valid else err.invalid)
+
+}
