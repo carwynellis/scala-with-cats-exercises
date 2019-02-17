@@ -31,8 +31,14 @@ class CheckSpec extends FlatSpec with Matchers {
 
   behavior of "FlatMap"
 
-  it should "return a Valid for a value that passes the given predicate containing the mapped result" in {
+  it should "return a Valid for a value that passes the given predicates" in {
     FlatMap(Pure(isGreaterThanThree), { i: Int => Pure(isEven) })(4) shouldBe Valid(4)
+  }
+
+  behavior of "AndThen"
+
+  it should "return a Valid for a value that passes the given predicates" in {
+    AndThen(Pure(isGreaterThanThree), Pure(isEven))(4) shouldBe Valid(4)
   }
 
 }
