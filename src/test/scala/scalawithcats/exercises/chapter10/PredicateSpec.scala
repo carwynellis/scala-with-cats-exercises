@@ -69,4 +69,11 @@ class PredicateSpec extends FlatSpec with Matchers {
     ))
   }
 
+  behavior of "run"
+
+  it should "should return a function that returns an Either[E, A]" in {
+    val f = isGreaterThanThree.run
+    f(4) shouldBe Right(4)
+  }
+
 }
