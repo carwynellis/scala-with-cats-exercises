@@ -11,8 +11,7 @@ object ValidationKleisli {
   type Check[A, B] = Kleisli[Result, A, B]
 
   // Create a check from a function:
-  def check[A, B](func: A => Result[B]): Check[A, B] =
-    Kleisli(func)
+  def check[A, B](func: A => Result[B]): Check[A, B] = Kleisli(func)
   // Create a check from a Predicate:
   def checkPred[A](pred: Predicate[Errors, A]): Check[A, A] = Kleisli[Result, A, A](pred.run)
 
@@ -40,6 +39,10 @@ object ValidationKleisli {
 
   val validateUsername: Check[String, String] = checkPred(longerThan(3)) andThen checkPred(alphanumeric)
 
-  lazy val validateEmailAddress: Check[String, String] = ???
+  val validateEmailAddress: Check[String, String] = checkPred(containsOnce('@')) andThen
+    checkPred(Predicate.lift(error("Must contain characters before the @ sign"), (a: String) => a.split('@').headOption.forall(_.length > 0))) andThen
+    checkPred(Predicate.lift(error("Must contain a . after the @ sign"), (a: String) => a.split('@').tail.headOption.forall(_.contains('.')))) andThen
+    checkPred(Predicate.lift(error("Must contain at least 3 characters after the @ sign"), (a: String) => a.split('@').tail.headOption.forall(_.length > 3)))
+
 
 }

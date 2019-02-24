@@ -21,7 +21,6 @@ scalacOptions ++= Seq(
   "-feature",               // Emit warnings where feature needs explicit import
   "-unchecked",             // Emit warnings related to type erasure
   "-Ywarn-unused:imports",  // Warn on unused imports
-  "-Xfatal-warnings",       // Make warnings fatal
   "-Ypartial-unification"   // Improve type constructor inference - see SI-2712
 )
 

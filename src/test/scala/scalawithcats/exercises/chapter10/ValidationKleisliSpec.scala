@@ -1,6 +1,5 @@
 package scalawithcats.exercises.chapter10
 
-import cats.data.Validated.{Invalid, Valid}
 import org.scalatest.{FlatSpec, Matchers}
 import scalawithcats.exercises.chapter10.ValidationKleisli._
 
@@ -22,24 +21,24 @@ class ValidationKleisliSpec extends FlatSpec with Matchers {
 
   behavior of "validateEmailAddress"
 
-  ignore should "accept a valid email address" in {
-    validateEmailAddress("foo@example.com") shouldBe Valid("foo@example.com")
+  it should "accept a valid email address" in {
+    validateEmailAddress("foo@example.com") shouldBe Right("foo@example.com")
   }
 
-  ignore should "reject an email address that does not contain an @ symbol" in {
-    validateEmailAddress("example.com") shouldBe Invalid(error("Must contain the character @"))
+  it should "reject an email address that does not contain an @ symbol" in {
+    validateEmailAddress("example.com") shouldBe Left(error("Must contain the character @ only once"))
   }
 
-  ignore should "reject an email address that contains no characters before the @ sign" in {
-    validateEmailAddress("@example.com") shouldBe Invalid(error("Must contain characters before the @ sign"))
+  it should "reject an email address that contains no characters before the @ sign" in {
+    validateEmailAddress("@example.com") shouldBe Left(error("Must contain characters before the @ sign"))
   }
 
-  ignore should "reject an email address that contains less than three characters after the @ sign" in {
-    validateEmailAddress("foo@e.") shouldBe Invalid(error("Must contain at least 3 characters after the @ sign"))
+  it should "reject an email address that contains less than three characters after the @ sign" in {
+    validateEmailAddress("foo@e.") shouldBe Left(error("Must contain at least 3 characters after the @ sign"))
   }
 
-  ignore should "reject an email address that does not contain a . in the string following the @ sign" in {
-    validateEmailAddress("foo@examplecom") shouldBe Invalid(error("Must contain a . after the @ sign"))
+  it should "reject an email address that does not contain a . in the string following the @ sign" in {
+    validateEmailAddress("foo@examplecom") shouldBe Left(error("Must contain a . after the @ sign"))
   }
 
 }
