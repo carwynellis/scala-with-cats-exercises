@@ -2,9 +2,9 @@ name := "scala-with-cats-exercises"
 
 version := "1.0"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.8"
 
-val catsVersion = "1.0.0"
+val catsVersion = "1.6.0"
 
 libraryDependencies ++= Seq(
     "org.typelevel" %% "cats-core"   % catsVersion,
