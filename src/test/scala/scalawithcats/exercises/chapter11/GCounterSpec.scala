@@ -1,6 +1,7 @@
 package scalawithcats.exercises.chapter11
 
 import org.scalatest.{FlatSpec, Matchers}
+import cats.implicits._
 
 class GCounterSpec extends FlatSpec with Matchers {
 
@@ -29,7 +30,7 @@ class GCounterSpec extends FlatSpec with Matchers {
   behavior of "total"
 
   it should "return zero for an empty counters map" in {
-    GCounter(Map.empty).total shouldBe 0
+    GCounter[Int](Map.empty).total shouldBe 0
   }
 
   it should "return the sum of all counters" in {

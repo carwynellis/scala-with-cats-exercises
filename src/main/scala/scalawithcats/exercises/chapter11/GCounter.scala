@@ -1,16 +1,15 @@
 package scalawithcats.exercises.chapter11
 
-final case class GCounter(counters: Map[String, Int]) {
+import cats.Monoid
+import cats.implicits._
 
-  def increment(machine: String, amount: Int): GCounter =
-    GCounter(counters.updated(machine, counters.get(machine).fold(amount)(_ + amount)))
+final case class GCounter[A](counters: Map[String, A]) {
 
-  def merge(that: GCounter): GCounter = GCounter(
-    counters.keySet.union(that.counters.keySet).map { machine =>
-      machine -> counters.getOrElse(machine, 0).max(that.counters.getOrElse(machine, 0))
-    }.toMap
-  )
+  def increment(machine: String, amount: A)(implicit m: Monoid[A]): GCounter[A] =
+    GCounter(counters.updated(machine, amount |+| counters.getOrElse(machine, m.empty)))
 
-  def total: Int = counters.values.sum
+  def merge(that: GCounter[A])(implicit m: BoundedSemiLattice[A]): GCounter[A] = GCounter[A](counters |+| that.counters)
+
+  def total(implicit m: Monoid[A]): A = counters.values.fold(m.empty)(_ |+| _)
 
 }
