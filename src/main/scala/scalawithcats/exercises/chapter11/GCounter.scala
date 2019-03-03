@@ -2,14 +2,24 @@ package scalawithcats.exercises.chapter11
 
 import cats.Monoid
 import cats.implicits._
+import scala.language.higherKinds
 
-final case class GCounter[A](counters: Map[String, A]) {
+trait GCounter[F[_,_],K, V] {
+  def increment(f: F[K, V])(k: K, v: V)(implicit m: Monoid[V]): F[K, V]
+  def merge(f1: F[K, V], f2: F[K, V])(implicit b: BoundedSemiLattice[V]): F[K, V]
+  def total(f: F[K, V])(implicit m: Monoid[V]): V
+}
 
-  def increment(machine: String, amount: A)(implicit m: Monoid[A]): GCounter[A] =
-    GCounter(counters.updated(machine, amount |+| counters.getOrElse(machine, m.empty)))
+object GCounter {
+  def apply[F[_,_], K, V](implicit counter: GCounter[F, K, V]) = counter
 
-  def merge(that: GCounter[A])(implicit m: BoundedSemiLattice[A]): GCounter[A] = GCounter[A](counters |+| that.counters)
+  implicit def mapInstance[K,V] = new GCounter[Map, K, V] {
 
-  def total(implicit m: Monoid[A]): A = counters.values.fold(m.empty)(_ |+| _)
+    override def increment(f: Map[K, V])(k: K, v: V)(implicit m: Monoid[V]): Map[K, V] =
+      f.updated(k, v |+| f.getOrElse(k, m.empty))
 
+    override def merge(f1: Map[K, V], f2: Map[K, V])(implicit b: BoundedSemiLattice[V]): Map[K, V] = f1 |+| f2
+
+    override def total(f: Map[K, V])(implicit m: Monoid[V]): V = f.values.fold(m.empty)(_ |+| _)
+  }
 }
