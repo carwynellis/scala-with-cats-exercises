@@ -22,5 +22,5 @@ object GCounter {
       }
       def merge(f1: F[K, V], f2: F[K, V])(implicit b: BoundedSemiLattice[V]): F[K, V] = f1 |+| f2
       def total(f: F[K, V])(implicit m: Monoid[V]): V = f.values.combineAll
-    }
+  }
 }

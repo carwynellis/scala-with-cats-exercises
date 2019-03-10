@@ -4,10 +4,13 @@ import org.scalatest.{FlatSpec, Matchers}
 import GCounter._
 import cats.instances.map._
 
-// TODO - scoping the implicits provides the desired behaviour.
-//      - we cannot have the BoundedSemiLattice int instance in scope with the Monoid[Int] instance from cats since
-//        they are ambiguous.
-//      - this is pretty ugly so surely there is a better way?
+// TODO
+//   * we cannot have the BoundedSemiLattice int instance in scope with the catsKernetStdGroupForInst instance since
+//     both share the type Monoid[Int]
+//   * scoping the implicits separately provides the desired behaviour
+//   * Is this the only way we can do this? We *could* provide a separate Monoid for incrementing so we could have this
+//     in scope with the BoundedSemiLattice instance but this is more boilerplate duplicating the instances that Cats
+//     provides.
 class GCounterSpec extends FlatSpec with Matchers {
 
   val underTest = {
@@ -18,7 +21,7 @@ class GCounterSpec extends FlatSpec with Matchers {
   behavior of "increment"
 
   {
-    import cats.instances.int._
+    import cats.instances.int.catsKernelStdGroupForInt
 
     it should "increment the count for the specified machine" in {
       underTest.increment(Map("A" -> 10))("A", 1) shouldBe Map("A" -> 11)
@@ -46,7 +49,7 @@ class GCounterSpec extends FlatSpec with Matchers {
   behavior of "total"
 
   {
-    import cats.instances.int._
+    import cats.instances.int.catsKernelStdGroupForInt
 
     it should "return zero for an empty counters map" in {
       underTest.total(Map.empty) shouldBe 0
